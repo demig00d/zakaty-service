@@ -1,0 +1,18 @@
+token: ''
+
+sheet:
+  spreadsheet-id: ''
+  range: ''
+  columns:
+    telegram-id: ''
+    firstname: ''
+    lastname: ''
+    patronym: ''
+    sum: ''
+
+http:
+  port: '8080'
+
+logger:
+  log_level: 'debug'
+  rollbar_env: 'zakaty-service'
