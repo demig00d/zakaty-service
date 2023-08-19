@@ -33,8 +33,9 @@ func (c Columns) FormatPerson(person []any) string {
 	)
 }
 func firstLetter(s string) string {
-	if len(s) > 0 {
-		return string(s[0] + '.')
+	runes := []rune(s)
+	if len(runes) > 0 {
+		return string([]rune{runes[0], '.'})
 	}
 
 	return ""

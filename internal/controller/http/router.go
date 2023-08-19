@@ -16,7 +16,7 @@ func NewRouter(handler *gin.Engine, l logger.Interface, uc usecase.Tournament, p
 	handler.Use(gin.Recovery())
 
 	r := &tournamentRouter{uc, pb, l}
-	// Order
+
 	handler.POST("/", func(c *gin.Context) {
 
 		var hook puzzlebot.WebHook
@@ -30,6 +30,9 @@ func NewRouter(handler *gin.Engine, l logger.Interface, uc usecase.Tournament, p
 			rating, _ := r.uc.GetRating(hook.User)
 			_ = pb.SendMessage(hook.User, rating)
 			c.JSON(http.StatusOK, rating)
+
+		default:
+
 		}
 
 	})
