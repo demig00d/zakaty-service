@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/demig00d/zakaty-service/config"
 	"github.com/demig00d/zakaty-service/internal/usecase/impl/columns"
+	"github.com/demig00d/zakaty-service/pkg/ttlcache"
 	"sort"
 	"strconv"
 	"strings"
@@ -14,31 +15,37 @@ import (
 )
 
 type TournamentImpl struct {
+	cache       *ttlcache.TTLCache[[][]any]
 	column      columns.Columns
 	spreadsheet sheets.Spreadsheet
 }
 
 func NewTournamentImpl(spreadsheet sheets.Spreadsheet, cfgColumns config.Columns) TournamentImpl {
 	return TournamentImpl{
+		cache:       ttlcache.NewTTLCache[[][]any](60),
 		column:      columns.FromConfigColumns(cfgColumns),
 		spreadsheet: spreadsheet,
 	}
 }
 
 func (t TournamentImpl) GetRating(user puzzlebot.User) (usecase.Raiting, error) {
+	persons, expired := t.cache.Get()
+	if expired {
+		resp, err := t.spreadsheet.Get()
+		if err != nil {
+			return "", err
+		}
 
-	resp, err := t.spreadsheet.Get()
-	if err != nil {
-		return "", err
+		persons = resp.Values
+		sort.SliceStable(persons, func(i, j int) bool {
+			value1, _ := strconv.Atoi(persons[i][t.column.Sum].(string))
+			value2, _ := strconv.Atoi(persons[j][t.column.Sum].(string))
+
+			return value1 > value2
+		})
+
+		t.cache.Put(persons)
 	}
-
-	persons := resp.Values
-	sort.SliceStable(persons, func(i, j int) bool {
-		value1, _ := strconv.Atoi(persons[i][t.column.Sum].(string))
-		value2, _ := strconv.Atoi(persons[j][t.column.Sum].(string))
-
-		return value1 > value2
-	})
 
 	isIn := false
 	var rating strings.Builder
