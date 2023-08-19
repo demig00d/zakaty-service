@@ -4,6 +4,8 @@ import (
 	"embed"
 	"fmt"
 	"github.com/demig00d/zakaty-service/config"
+	"github.com/demig00d/zakaty-service/pkg/puzzlebot"
+	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -27,15 +29,15 @@ func Run(cfg config.Config) {
 		l.Fatal(err)
 	}
 
-	// client := &http.Client{}
-	// pb := puzzlebot.NewPuzzleBot(client, token)
+	client := &http.Client{}
+	pb := puzzlebot.NewPuzzleBot(client, cfg.Token)
 
 	tournamentUseCase := impl.NewTournamentImpl(spreadsheet, cfg.Sheet.Columns)
 
 	// HTTP Server
 	handler := gin.New()
 
-	v1.NewRouter(handler, l, tournamentUseCase)
+	v1.NewRouter(handler, l, tournamentUseCase, pb)
 	httpServer := httpserver.New(handler, httpserver.Port(cfg.Port))
 
 	// Waiting signal

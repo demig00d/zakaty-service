@@ -29,7 +29,7 @@ func (t TournamentImpl) GetRating(user puzzlebot.User) (usecase.Raiting, error) 
 
 	resp, err := t.spreadsheet.Get()
 	if err != nil {
-		return usecase.Raiting(""), err
+		return "", err
 	}
 
 	persons := resp.Values
@@ -63,6 +63,6 @@ func (t TournamentImpl) GetRating(user puzzlebot.User) (usecase.Raiting, error) 
 		}
 	}
 
-	return usecase.Raiting(rating.String()), nil
+	return rating.String(), nil
 
 }

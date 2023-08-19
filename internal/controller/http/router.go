@@ -10,12 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(handler *gin.Engine, l logger.Interface, uc usecase.Tournament) {
+func NewRouter(handler *gin.Engine, l logger.Interface, uc usecase.Tournament, pb puzzlebot.Puzzlebot) {
 	// Options
 	handler.Use(gin.Logger())
 	handler.Use(gin.Recovery())
 
-	r := &tournamentRouter{uc, l}
+	r := &tournamentRouter{uc, pb, l}
 	// Order
 	handler.POST("/", func(c *gin.Context) {
 
@@ -28,6 +28,7 @@ func NewRouter(handler *gin.Engine, l logger.Interface, uc usecase.Tournament) {
 		switch hook.Command.Name {
 		case "Турнирная таблица":
 			rating, _ := r.uc.GetRating(hook.User)
+			_ = pb.SendMessage(rating)
 			c.JSON(http.StatusOK, rating)
 		}
 
