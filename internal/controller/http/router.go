@@ -28,7 +28,7 @@ func NewRouter(handler *gin.Engine, l logger.Interface, uc usecase.Tournament, p
 		switch hook.Command.Name {
 		case "Турнирная таблица":
 			rating, _ := r.uc.GetRating(hook.User)
-			_ = pb.SendMessage(rating)
+			_ = pb.SendMessage(hook.User, rating)
 			c.JSON(http.StatusOK, rating)
 		}
 

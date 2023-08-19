@@ -2,6 +2,7 @@ package puzzlebot
 
 import (
 	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -19,14 +20,19 @@ func NewPuzzleBot(client *http.Client, token string) Puzzlebot {
 	}
 }
 
-func (pb Puzzlebot) SendMessage(msg string) error {
-	data := fmt.Sprintf(`{'chat_id': userId, 'text': %s, 'parse_mode': "html")`, msg)
-	req, err := http.NewRequest("POST", pb.url+"sendMessage", bytes.NewBufferString(data))
+func (pb Puzzlebot) SendMessage(user User, msg string) error {
+	data, _ := json.Marshal(map[string]interface{}{
+		"chat_id":    user.Id,
+		"text":       msg,
+		"parse_mode": "html",
+	})
+
+	req, err := http.NewRequest("POST", pb.url+"tg.sendMessage", bytes.NewBuffer(data))
 
 	if err != nil {
 		return errors.New("puzzlebot: can't form request")
 	}
 
-	pb.client.Do(req)
-	return nil
+	_, err = pb.client.Do(req)
+	return err
 }

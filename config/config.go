@@ -1,15 +1,16 @@
 package config
 
 import (
+	"unicode/utf8"
+
 	"github.com/ilyakaznacheev/cleanenv"
 	"gopkg.in/yaml.v3"
-	"unicode/utf8"
 )
 
 type (
 	// Config -.
 	Config struct {
-		Token string `yaml:"token env:"TOKEN""`
+		Token string `yaml:"token" env:"TOKEN""`
 		Sheet `yaml:"sheet"`
 		HTTP  `yaml:"http"`
 		Log   `yaml:"logger"`
