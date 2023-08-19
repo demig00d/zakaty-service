@@ -3,12 +3,13 @@ package app
 import (
 	"embed"
 	"fmt"
-	"github.com/demig00d/zakaty-service/config"
-	"github.com/demig00d/zakaty-service/pkg/puzzlebot"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/demig00d/zakaty-service/config"
+	"github.com/demig00d/zakaty-service/pkg/puzzlebot"
 
 	v1 "github.com/demig00d/zakaty-service/internal/controller/http"
 	"github.com/demig00d/zakaty-service/internal/usecase/impl"
@@ -35,6 +36,7 @@ func Run(cfg config.Config) {
 	tournamentUseCase := impl.NewTournamentImpl(spreadsheet, cfg.Sheet.Columns)
 
 	// HTTP Server
+	gin.SetMode(gin.ReleaseMode)
 	handler := gin.New()
 
 	v1.NewRouter(handler, l, tournamentUseCase, pb)
