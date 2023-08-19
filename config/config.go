@@ -45,7 +45,7 @@ type (
 // NewConfig returns app config.
 func NewConfig() (Config, error) {
 	cfg := &Config{}
-	err := cleanenv.ReadConfig("./config/config.yml", cfg)
+	err := cleanenv.ReadConfig("./config.yml", cfg)
 
 	return *cfg, err
 }
