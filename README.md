@@ -1,5 +1,5 @@
 # TODO
-- [ ] cache table access
-- [ ] use cases 
-    - [ ] forward messages
-    - [ ] submit applications
+- [x] cache table access
+- [-] use cases (it turned out that the existing functionality is sufficient )
+    - [-] forward messages
+    - [-] submit applications
