@@ -1,5 +1,9 @@
+# Service purpose
+This service was supposed to replace the local python script due to its better extensibility
+
 # TODO
 - [x] cache table access
-- [-] use cases (it turned out that the existing functionality is sufficient )
-    - [-] forward messages
-    - [-] submit applications
+- [x] use cases
+    - [x] collecting rankings from google sheets    
+    - forward messages _(no longer needed)_
+    - submit applications _(no longer needed)_
